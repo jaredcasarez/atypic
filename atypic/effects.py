@@ -27,9 +27,11 @@ class RollPixelsEffect(Effect):
     Optionally restrict the effect to a region defined by a mask or shape.
     """
 
-    def __init__(self, frame, which="row", shift_length=10, **kwargs):
+    def __init__(self, frame, which="row", shift_length=0.1, **kwargs):
         super().__init__(frame, **kwargs)
         self.which = which
+        if isinstance(shift_length, float):
+            shift_length = int(min(frame.shape[:2]) * shift_length)
         self.shift_length = shift_length
 
     def apply(self):
@@ -72,13 +74,18 @@ class RandomRollPixelsEffect(RollPixelsEffect):
         self,
         frame,
         which="row",
-        group_size=1,
-        shift_range=(-5, 5),
+        group_size=0.2,
+        shift_range=(0.1,0.1),
         **kwargs
     ):
         super().__init__(frame, **kwargs)
         self.which = which
+        if isinstance(group_size, float):
+            group_size = int(min(frame.shape[:2]) * group_size)
         self.group_size = group_size
+        if any(isinstance(end, float) for end in shift_range):
+            print(frame.shape[:2])
+            shift_range = (-int(min(frame.shape[:2]) * shift_range[0]), int(min(frame.shape[:2]) * shift_range[1]))
         self.shift_range = shift_range
 
     def apply(self):
@@ -154,12 +161,14 @@ class ColorChannelSplitEffect(Effect):
     def __init__(
         self,
         frame,
-        split_distance=10,
+        split_distance=0.1,
         which="row",
         order="bgr",
         **kwargs
     ):
         super().__init__(frame, **kwargs)
+        if isinstance(split_distance, float):
+            split_distance = int(min(frame.shape[:2]) * split_distance)
         self.split_distance = split_distance
         self.which = which
         self.order = order
@@ -198,10 +207,12 @@ class CorruptionEffect(Effect):
     """
 
     def __init__(
-        self, frame, corruption_type="random", bitsize=8, **kwargs
+        self, frame, corruption_type="random", bitsize=0.01, **kwargs
     ):
         super().__init__(frame, **kwargs)
         self.corruption_type = corruption_type
+        if isinstance(bitsize, float):
+            bitsize = int(min(frame.shape[:2]) * bitsize)
         self.bitsize = bitsize
 
     def apply(self):
@@ -286,7 +297,7 @@ class ColorPaletteReductionEffect(Effect):
     """
     Reduce the number of colors in a region, simulating posterization or hardware limitations.
     """
-    def __init__(self, frame, num_colors=8, **kwargs):
+    def __init__(self, frame, num_colors=4, **kwargs):
         super().__init__(frame, **kwargs)
         self.num_colors = num_colors
 

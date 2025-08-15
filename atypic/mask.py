@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-class MaskElement:
+class SubMasker:
     """
     A class to represent an individual mask element.
     This is used to create and manage individual masks.
@@ -9,7 +9,7 @@ class MaskElement:
     def __init__(self, mask):
         self.mask = mask
             
-class Mask:
+class Masker:
     """
     A class to handle masking operations for video effects.
     """
@@ -44,7 +44,7 @@ class Mask:
         center: (x, y) coordinates of the circle center
         radius: radius of the circle
         """
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         h, w = self.frame.shape[:2]
         if isinstance(radius, float):
             radius = int(min(h, w) * radius)
@@ -68,7 +68,7 @@ class Mask:
         if any(isinstance(val, float) for val in bottom_right):
             bottom_right = (int(w * bottom_right[0]) if isinstance(bottom_right[0], float) else bottom_right[0],
                            int(h * bottom_right[1]) if isinstance(bottom_right[1], float) else bottom_right[1])
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         cv2.rectangle(mask_element.mask, top_left, bottom_right, color=255, thickness=-1)
         self._process_behavior(mask_element, behavior=behavior if behavior else self.behavior)
         return mask_element
@@ -87,8 +87,7 @@ class Mask:
             else:
                 pts.append([pt[0], pt[1]])
         pts = np.array(pts, np.int32)
-        print(pts)
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         cv2.fillPoly(mask_element.mask, [pts], color=255)
         self._process_behavior(mask_element,behavior=behavior if behavior else self.behavior)
         return mask_element
@@ -105,7 +104,7 @@ class Mask:
             center = (int(w * center[0]), int(h * center[1]))
         if all(isinstance(val, float) for val in axes):
             axes = (int(w * axes[0]), int(h * axes[1]))
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         cv2.ellipse(mask_element.mask, center, axes, angle, 0, 360, color=255, thickness=-1)
         self._process_behavior(mask_element,behavior=behavior if behavior else self.behavior)
         return mask_element
@@ -124,7 +123,7 @@ class Mask:
             start = int((h if orientation=="horizontal" else w) * start)
         if isinstance(end, float):
             end = int((h if orientation=="horizontal" else w) * end)
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         if orientation == "horizontal":
             if end is None:
                 end = h
@@ -146,7 +145,7 @@ class Mask:
         # Handle proportional float for block_size
         if isinstance(block_size, float):
             block_size = int(min(h, w) * block_size)
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         for i in range(0, h, block_size):
             for j in range(0, w, block_size):
                 if (i // block_size + j // block_size) % 2 == 0:
@@ -168,7 +167,7 @@ class Mask:
             stripe_width = int((h if orientation=="horizontal" else w) * stripe_width)
         if isinstance(gap, float):
             gap = int((h if orientation=="horizontal" else w) * gap)
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8))
+        mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         if orientation == "horizontal":
             for i in range(0, h, stripe_width + gap):
                 mask_element.mask[i:i+stripe_width, :] = 255
@@ -181,6 +180,6 @@ class Mask:
         """
         Create a mask that covers the entire frame.
         """
-        mask_element = MaskElement(np.zeros(self.frame.shape[:2], dtype=np.uint8)*255)
+        mask_element = SubMasker(np.ones(self.frame.shape[:2], dtype=np.uint8)*255)
         self._process_behavior(mask_element,behavior=behavior if behavior else self.behavior)
         return mask_element

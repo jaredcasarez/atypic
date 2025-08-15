@@ -8,12 +8,12 @@ from atypic.effects import (
     ColorValueEffect,
     ColorChannelSplitEffect,
 )
-from atypic.mask import Mask, MaskElement
+from atypic.mask import Masker, SubMasker
 
 
 def test_mask_combinations():
     frame = np.zeros((100, 100, 3), dtype=np.uint8)
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask((10, 10), (40, 40))
     mask_obj.create_circle_mask((70, 70), 20)
     mask_obj.create_polygon_mask([(50, 10), (80, 10), (65, 40)])
@@ -33,7 +33,7 @@ def test_effects_on_real_image():
     img_path = "input.jpg"
     assert os.path.exists(img_path)
     frame = cv2.imread(img_path)
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask((50, 50), (150, 150))
     mask_obj.create_circle_mask((200, 200), 50)
     mask_obj.create_polygon_mask([(100, 100), (200, 100), (150, 200)])
@@ -74,7 +74,7 @@ def print_mask(mask):
 
 def test_effect_mask_rectangle():
     frame = np.zeros((10, 10, 3), dtype=np.uint8)
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask((2, 2), (7, 7))
     mask = mask_obj.mask
 
@@ -87,7 +87,7 @@ def test_effect_mask_rectangle():
 def test_roll_pixels_effect_row():
     frame = np.zeros((10, 10, 3), dtype=np.uint8)
     frame[5, :, :] = 1
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_full_mask()
     effect = RollPixelsEffect(frame, which="row", shift_length=2, mask=mask_obj.mask)
     out = effect.apply()
@@ -100,7 +100,7 @@ def test_random_roll_pixels_row_group():
     for i in range(region[0], region[0] + region[2]):
         for j in range(region[1], region[1] + region[3]):
             frame[i, j, :] = i + j
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask(
         (region[0], region[1]), (region[0] + region[2], region[1] + region[3])
     )
@@ -119,7 +119,7 @@ def test_random_roll_pixels_col_group():
     for i in range(region[0], region[0] + region[2]):
         for j in range(region[1], region[1] + region[3]):
             frame[i, j, :] = i * j
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask(
         (region[0], region[1]), (region[0] + region[2], region[1] + region[3])
     )
@@ -135,7 +135,7 @@ def test_random_roll_pixels_col_group():
 def test_color_value_effect():
     frame = np.ones((10, 10, 3), dtype=np.uint8) * 100
     region = (2, 2, 5, 5)
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask(
         (region[0], region[1]), (region[0] + region[2], region[1] + region[3])
     )
@@ -152,7 +152,7 @@ def test_color_channel_split_effect():
     for i in range(region[0], region[0] + region[2]):
         for j in range(region[1], region[1] + region[3]):
             frame[i, j, :] = i * j
-    mask_obj = Mask(frame)
+    mask_obj = Masker(frame)
     mask_obj.create_rectangle_mask(
         (region[0], region[1]), (region[0] + region[2], region[1] + region[3])
     )
