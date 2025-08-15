@@ -11,12 +11,6 @@ Install dependencies:
 pip install opencv-python numpy
 ```
 
-Install package:
-```bash
-git clone https://github.com/jaredcasarez/atypic
-cd atypic
-pip install -e .
-```
 ---
 ## Example Usage
 
