@@ -12,3 +12,4 @@ atypic documentation
    :caption: Contents:
 
    atypic
+   modules

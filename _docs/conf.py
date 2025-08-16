@@ -7,8 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'atypic'
-copyright = '2025, Author'
-author = 'Author'
+copyright = '2025, Jared Casarez'
+author = 'Jared Casarez'
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -40,6 +40,6 @@ todo_include_todos = True
 import sys
 import os 
 
-sys.path.insert(0, os.path.abspath('../src/atypic'))
+sys.path.insert(0, os.path.abspath('..'))
 print(sys.path)
 print(sys.executable)
