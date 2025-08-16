@@ -37,6 +37,6 @@ todo_include_todos = True
 import sys
 import os 
 
-sys.path.insert(0, os.path.abspath('../src'))
+sys.path.insert(0, os.path.abspath('../src/atypic'))
 print(sys.path)
 print(sys.executable)
