@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
-    
+
+
 class Effect:
     """
     Base class for image/video effects.
@@ -9,25 +10,39 @@ class Effect:
     def __init__(self, frame, mask=None):
         """
         Initialize the effect with a frame and optional region and shape.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+
+            mask (numpy.ndarray, optional): A binary mask defining the region to apply the effect.
+            If None, the effect applies to the entire frame.
         """
         self.frame = frame
         self.out = frame.copy()
-        self.mask = mask if mask is not None else np.zeros(frame.shape[:2], dtype=np.uint8)
+        self.mask = (
+            mask if mask is not None else np.zeros(frame.shape[:2], dtype=np.uint8)
+        )
 
     def apply_mask(self):
         """
-        Ensure the effect is only visible where mask == 255. Restore original frame elsewhere.
+        Ensure the effect is only visible where mask == 255, if subclass does not consider mask upon creation
         """
         self.out[self.mask != 255] = self.frame[self.mask != 255]
 
 
 class RollPixelsEffect(Effect):
     """
-    Apply a pixel roll effect to a video frame.
-    Optionally restrict the effect to a region defined by a mask or shape.
+    Apply a pixel roll effect to an image frame.
     """
 
     def __init__(self, frame, which="row", shift_length=0.1, **kwargs):
+        """
+        Initialize the effect with a frame, direction, and shift length.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            which (str): Direction of the roll, either 'row' or 'col'.
+            shift_length (int | float): Length of the pixel shift. If float, it is interpreted as a proportion of the frame size.
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
         super().__init__(frame, **kwargs)
         self.which = which
         if isinstance(shift_length, float):
@@ -36,7 +51,7 @@ class RollPixelsEffect(Effect):
 
     def apply(self):
         """
-        Apply the glitch effect to the frame.
+        Apply the pixel roll effect to the frame.
         which: 'row' or 'col' (default uses self.which)
         """
         nrows, ncols = self.frame.shape[:2]
@@ -47,6 +62,9 @@ class RollPixelsEffect(Effect):
         return self.out
 
     def _row_shift(self):
+        """
+        Shift pixels in each row by the specified length.
+        """
         for i in np.where(np.any(self.mask == 255, axis=1))[0]:
             shift = self.shift_length
             row_mask = self.mask[i, :]
@@ -58,6 +76,9 @@ class RollPixelsEffect(Effect):
                     )
 
     def _col_shift(self):
+        """
+        Shift pixels in each column by the specified length.
+        """
         for j in np.where(np.any(self.mask == 255, axis=0))[0]:
             shift = self.shift_length
             col_mask = self.mask[:, j]
@@ -70,14 +91,23 @@ class RollPixelsEffect(Effect):
 
 
 class RandomRollPixelsEffect(RollPixelsEffect):
+    """
+    Apply a random pixel roll effect to an image frame.
+    This effect randomly shifts blocks of pixels in either rows or columns.
+    """
+
     def __init__(
-        self,
-        frame,
-        which="row",
-        group_size=0.2,
-        shift_range=(0.1,0.1),
-        **kwargs
+        self, frame, which="row", group_size=0.2, shift_range=(0.1, 0.1), **kwargs
     ):
+        """
+        Initialize the effect with a frame, direction, group size, and shift range.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            which (str): Direction of the roll, either 'row' or 'col'.
+            group_size (int | float): Size of the pixel block to shift. If float, it is interpreted as a proportion of the frame size.
+            shift_range (tuple[int | float, int | float]): Range of random shifts. If floats, they are interpreted as proportions of the frame size.
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
         super().__init__(frame, **kwargs)
         self.which = which
         if isinstance(group_size, float):
@@ -85,13 +115,15 @@ class RandomRollPixelsEffect(RollPixelsEffect):
         self.group_size = group_size
         if any(isinstance(end, float) for end in shift_range):
             print(frame.shape[:2])
-            shift_range = (-int(min(frame.shape[:2]) * shift_range[0]), int(min(frame.shape[:2]) * shift_range[1]))
+            shift_range = (
+                -int(min(frame.shape[:2]) * shift_range[0]),
+                int(min(frame.shape[:2]) * shift_range[1]),
+            )
         self.shift_range = shift_range
 
     def apply(self):
         """
-        Apply the glitch effect to the frame.
-        which: 'row' or 'col' (default uses self.which)
+        Apply the random pixel roll effect to the frame.
         """
         nrows, ncols = self.frame.shape[:2]
         if self.which == "row":
@@ -101,6 +133,9 @@ class RandomRollPixelsEffect(RollPixelsEffect):
         return self.out
 
     def _random_row_shift(self, nrows):
+        """
+        Shift blocks of pixels in each row by a random amount within the specified range.
+        """
         block_starts = [
             i
             for i in range(0, nrows, self.group_size)
@@ -117,6 +152,9 @@ class RandomRollPixelsEffect(RollPixelsEffect):
                 )
 
     def _random_col_shift(self, ncols):
+        """
+        Shift blocks of pixels in each column by a random amount within the specified range.
+        """
         block_starts = [
             j
             for j in range(0, ncols, self.group_size)
@@ -135,11 +173,20 @@ class RandomRollPixelsEffect(RollPixelsEffect):
 
 class ColorValueEffect(Effect):
     """
-    Apply a color value shift effect to a video frame.
-    Optionally restrict the effect to a region defined by a mask or shape.
+    Apply a color value shift effect to an image frame.
+    This effect shifts the color values of the frame by a specified amount.
     """
 
     def __init__(self, frame, shift_value=50, **kwargs):
+        """
+        Initialize the effect with a frame and shift value.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            shift_value (int | tuple[int, int, int]): Amount to shift the color values
+            If an int, applies the same shift to all channels.
+            If a tuple, applies different shifts to each channel (B, G, R).
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
         super().__init__(frame, **kwargs)
         self.shift_value = shift_value
 
@@ -154,18 +201,21 @@ class ColorValueEffect(Effect):
 
 class ColorChannelSplitEffect(Effect):
     """
-    Apply a color channel split effect to a video frame.
-    Optionally restrict the effect to a region defined by a mask or shape.
+    Apply a color channel split effect to an image frame.
+    This effect shifts each color channel (B, G, R) by a specified distance.
     """
 
-    def __init__(
-        self,
-        frame,
-        split_distance=0.1,
-        which="row",
-        order="bgr",
-        **kwargs
-    ):
+    def __init__(self, frame, split_distance=0.1, which="row", order="bgr", **kwargs):
+        """
+        Initialize the effect with a frame, split distance, direction, and channel order.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            split_distance (int | float): Distance to shift each color channel. If float, it is interpreted as a proportion of the frame size.
+            which (str): Direction of the split, either 'row' or 'col'.
+            order (str): Order of color channels to apply the effect on ('bgr', 'rgb', etc.).
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
+
         super().__init__(frame, **kwargs)
         if isinstance(split_distance, float):
             split_distance = int(min(frame.shape[:2]) * split_distance)
@@ -174,6 +224,13 @@ class ColorChannelSplitEffect(Effect):
         self.order = order
 
     def _shift_color_channel(self, channel, shift):
+        """
+        Shift a single color channel by the specified distance.
+        Args:
+            channel (numpy.ndarray): The color channel to shift.
+            shift (int): The distance to shift the channel.
+        """
+
         if self.which == "row":
             # Iterate over rows with mask coverage
             for i in np.where(np.any(self.mask == 255, axis=1))[0]:
@@ -191,6 +248,9 @@ class ColorChannelSplitEffect(Effect):
                 channel[:, j] = col
 
     def apply(self):
+        """
+        Apply the color channel split effect to the frame.
+        """
         channel_lookup = {"r": 2, "g": 1, "b": 0}  # OpenCV uses BGR
         self.out = self.frame.copy()
         for channel in self.order:
@@ -202,13 +262,20 @@ class ColorChannelSplitEffect(Effect):
 
 class CorruptionEffect(Effect):
     """
-    Apply a corruption effect to a video frame.
-    Optionally restrict the effect to a region defined by a mask or shape.
+    Apply a corruption effect to an image frame.
+    This effect randomly corrupts blocks of pixels in the frame.
     """
 
-    def __init__(
-        self, frame, corruption_type="random", bitsize=0.01, **kwargs
-    ):
+    def __init__(self, frame, corruption_type="random", bitsize=0.01, **kwargs):
+        """
+        Initialize the effect with a frame, corruption type, and bitsize.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            corruption_type (str): Type of corruption to apply (e.g., 'random').
+            bitsize (int | float): Size of the corruption block. If float, it is
+            interpreted as a proportion of the frame size.
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
         super().__init__(frame, **kwargs)
         self.corruption_type = corruption_type
         if isinstance(bitsize, float):
@@ -235,18 +302,21 @@ class CorruptionEffect(Effect):
 
 class SortEffect(Effect):
     """
-    Apply a sorting effect to a video frame.
-    Optionally restrict the effect to a region defined by a mask or shape.
+    Apply a sorting effect to an image frame.
+    This effect sorts pixels in a specified direction (row or column) based on their color values.
     """
 
-    def __init__(
-        self,
-        frame,
-        which="row",
-        sort_by="value",
-        reverse=False,
-        **kwargs
-    ):
+    def __init__(self, frame, which="row", sort_by="value", reverse=False, **kwargs):
+        """
+        Initialize the effect with a frame, direction, sorting criteria, and reverse flag.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            which (str): Direction of the sort, either 'row' or 'col'.
+            sort_by (str): Criteria to sort by ('value', 'r', 'g',
+            'b'). If 'value', sorts by average color value; if 'r', 'g', or 'b', sorts by that channel.
+            reverse (bool): If True, reverses the sort order.
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
         super().__init__(frame, **kwargs)
         self.which = which
         self.sort_by = sort_by
@@ -277,7 +347,7 @@ class SortEffect(Effect):
             for i in np.where(np.any(self.mask == 255, axis=1))[0]:
                 row_mask = self.mask[i, :]
                 if np.any(row_mask == 255):
-                    self.out[i, row_mask == 255] = sort_row_func(i,row_mask)
+                    self.out[i, row_mask == 255] = sort_row_func(i, row_mask)
                     if self.reverse:
                         self.out[i, row_mask == 255] = np.flip(
                             self.out[i, row_mask == 255], axis=0
@@ -286,22 +356,36 @@ class SortEffect(Effect):
             for j in np.where(np.any(self.mask == 255, axis=0))[0]:
                 col_mask = self.mask[:, j]
                 if np.any(col_mask == 255):
-                    self.out[col_mask == 255, j] = sort_col_func(j,col_mask)
+                    self.out[col_mask == 255, j] = sort_col_func(j, col_mask)
                     if self.reverse:
                         self.out[col_mask == 255, j] = np.flip(
                             self.out[col_mask == 255, j]
                         )
         return self.out
 
+
 class ColorPaletteReductionEffect(Effect):
     """
-    Reduce the number of colors in a region, simulating posterization or hardware limitations.
+    Apply a color palette reduction effect to an image frame.
+    This effect reduces the number of colors in the frame to a specified number.
     """
+
     def __init__(self, frame, num_colors=4, **kwargs):
+        """
+        Initialize the effect with a frame and number of colors.
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            num_colors (int): Number of colors to reduce the frame to.
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
         super().__init__(frame, **kwargs)
         self.num_colors = num_colors
 
     def apply(self):
+        """
+        Apply the color palette reduction effect to the frame.
+        This method quantizes each color channel to the specified number of colors.
+        """
         # Quantize each channel to num_colors levels
         levels = np.linspace(0, 255, self.num_colors, dtype=np.uint8)
         quantized = np.zeros_like(self.frame)

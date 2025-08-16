@@ -1,5 +1,4 @@
-"""Video Effects Library: Add atypical artifacts to image frames."""
-
-# Import effect modules here
-from . import effects
+"""atypic: Add atypical artifacts to image frames."""
 from . import mask
+from . import effects
+# Import effect modules here

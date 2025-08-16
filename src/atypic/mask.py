@@ -1,20 +1,37 @@
 import cv2
 import numpy as np
 
+"""
+mask.py
+This module provides classes and methods for creating and managing masks for image effects.
+"""
 class SubMasker:
     """
     A class to represent an individual mask element.
-    This is used to create and manage individual masks.
+    This is used to create and manage individual masks generated in the Masker class.
     """
     def __init__(self, mask):
+        """
+        Args:
+        mask (np.ndarray): The mask array.
+        """
         self.mask = mask
             
 class Masker:
     """
-    A class to handle masking operations for video effects.
+    A class to create and manage masks for video frames.
+    It allows for the creation of various shapes and patterns as masks, which can be applied to video frames.
+    The masks can be combined using different behaviors such as 'or', 'and', 'xor', 'nand', and 'nor'.
     """
 
     def __init__(self, frame, region=None, shape=None, behavior='or'):
+        """
+        Args:
+        frame (np.ndarray): The video frame to apply masks to.
+        region (Any, optional): Optional region of interest in the frame (not used in this implementation).
+        shape (Any, optional): Optional shape of the mask (not used in this implementation).
+        behavior (str, optional): The default behavior for combining masks ('or', 'and', 'xor', 'nand', 'nor').
+        """
         self.frame = frame
         self.region = region
         self.shape = shape
@@ -22,6 +39,12 @@ class Masker:
         self.mask = np.zeros(frame.shape[:2], dtype=np.uint8)
 
     def _process_behavior(self, mask_element, behavior=None):
+        """
+        Process the mask element based on the specified behavior.
+        Args:
+        mask_element (SubMasker): The SubMasker instance containing the mask to be processed.
+        behavior (str, optional): The behavior to apply when combining submasks ('or', 'and', 'xor', 'nand', 'nor'). If None, uses the default behavior set during initialization.
+        """
         checked_behavior = behavior if behavior else self.behavior
         if  checked_behavior == 'or':
             cv2.bitwise_or(self.mask, mask_element.mask, self.mask)
@@ -41,8 +64,10 @@ class Masker:
     def create_circle_mask(self, center, radius, behavior=None):
         """
         Create a circular mask.
-        center: (x, y) coordinates of the circle center
-        radius: radius of the circle
+        Args:
+        center (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the circle center
+        radius (int | float): Radius of the circle
+        behavior (str, optional): Mask combination behavior
         """
         mask_element = SubMasker(np.zeros(self.frame.shape[:2], dtype=np.uint8))
         h, w = self.frame.shape[:2]
@@ -57,8 +82,10 @@ class Masker:
     def create_rectangle_mask(self, top_left, bottom_right, behavior=None):
         """
         Create a rectangular mask.
-        top_left: (x, y) coordinates of the top-left corner
-        bottom_right: (x, y) coordinates of the bottom-right corner
+        Args:
+        top_left (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the top-left corner
+        bottom_right (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the bottom-right corner
+        behavior (str, optional): Mask combination behavior
         """
         h, w = self.frame.shape[:2]
         # Handle proportional floats
@@ -76,7 +103,9 @@ class Masker:
     def create_polygon_mask(self, points, behavior=None):
         """
         Create a polygonal mask.
-        points: list of (x, y) coordinates defining the polygon vertices
+        Args:
+        points (list[tuple[int, int] | tuple[float, float]]): List of (x, y) coordinates defining the polygon vertices
+        behavior (str, optional): Mask combination behavior
         """
         h, w = self.frame.shape[:2]
         # Handle proportional floats for each point
@@ -94,9 +123,11 @@ class Masker:
     def create_ellipse_mask(self, center, axes, angle=0, behavior=None):
         """
         Create an elliptical mask.
-        center: (x, y) coordinates of the ellipse center
-        axes: (major_axis_length, minor_axis_length)
-        angle: rotation angle of the ellipse in degrees
+        Args:
+        center (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the ellipse center
+        axes (tuple[int, int] | tuple[float, float]): (major_axis_length, minor_axis_length)
+        angle (float, optional): Rotation angle of the ellipse in degrees
+        behavior (str, optional): Mask combination behavior
         """
         h, w = self.frame.shape[:2]
         # Handle proportional floats
@@ -113,9 +144,11 @@ class Masker:
     def create_band_mask(self, orientation="horizontal", start=0, end=None, behavior=None):
         """
         Create a horizontal or vertical band mask.
-        orientation: 'horizontal' or 'vertical'
-        start: starting index of the band
-        end: ending index of the band (defaults to frame edge)
+        Args:
+        orientation (str): 'horizontal' or 'vertical'
+        start (int | float): Starting index of the band
+        end (int | float, optional): Ending index of the band (defaults to frame edge)
+        behavior (str, optional): Mask combination behavior
         """
         h, w = self.frame.shape[:2]
         # Handle proportional floats
@@ -139,7 +172,9 @@ class Masker:
     def create_checkerboard_mask(self, block_size=10, behavior=None):
         """
         Create a checkerboard pattern mask.
-        block_size: size of each square block
+        Args:
+        block_size (int | float): Size of each square block
+        behavior (str, optional): Mask combination behavior
         """
         h, w = self.frame.shape[:2]
         # Handle proportional float for block_size
@@ -157,9 +192,11 @@ class Masker:
     def create_stripe_mask(self, orientation="horizontal", stripe_width=10, gap=10, behavior=None):
         """
         Create a striped mask.
-        orientation: 'horizontal' or 'vertical'
-        stripe_width: width of each stripe
-        gap: gap between stripes
+        Args:
+        orientation (str): 'horizontal' or 'vertical'
+        stripe_width (int | float): Width of each stripe
+        gap (int | float): Gap between stripes
+        behavior (str, optional): Mask combination behavior
         """
         h, w = self.frame.shape[:2]
         # Handle proportional floats
@@ -179,6 +216,8 @@ class Masker:
     def create_full_mask(self, behavior=None):
         """
         Create a mask that covers the entire frame.
+        Args:
+        behavior (str, optional): Mask combination behavior
         """
         mask_element = SubMasker(np.ones(self.frame.shape[:2], dtype=np.uint8)*255)
         self._process_behavior(mask_element,behavior=behavior if behavior else self.behavior)
