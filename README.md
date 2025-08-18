@@ -90,7 +90,7 @@ from atypic.mask import Masker
 frame = cv2.imread("input.jpg") #load image frame
 masker = Masker(frame) #create blank mask
 masker.create_rectangle_mask((0.1,0.3),(0.7,0.7))
-corruption_effect = CorruptionEffect(frame, mask=masker.mask)
+corruption_effect = CorruptionEffect(frame, mask=masker.mask) #pass mask into effect initialization
 edited_frame = corruption_effect.apply()
 plt.axis("off")
 plt.imshow(cv2.cvtColor(edited_frame, cv2.COLOR_BGR2RGB))
