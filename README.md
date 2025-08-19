@@ -3,11 +3,11 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <img src="images/demo.gif" alt="demos"  height="320" />
+  <img src="images/demo.gif" alt="demos"  height="240" />
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="320" height="320">
+    <img src="images/logo.png" alt="Logo" width="240" height="240">
   </a>
-   <img src="images/demo.gif" alt="demos"  height="320" />
+   <img src="images/demo.gif" alt="demos"  height="240" />
 
   <p align="center">
     Image editing, but wrong.
