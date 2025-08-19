@@ -4,9 +4,9 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/demo.gif" alt="demos"  width="500" />
     <img src="images/logo.png" alt="Logo" width="160" height="160">
   </a>
+  <img src="images/demo.gif" alt="demos"  width="500" />
 
 
   <p align="center">
