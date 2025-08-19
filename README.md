@@ -14,7 +14,7 @@
     <a href="https://atypic.readthedocs.io/en/latest/#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <img src="images/demo.gif" alt="demos"  width="250" />
+    <img src="images/demo.gif" alt="demos"  width="500" />
   </p>
 </div>
 
