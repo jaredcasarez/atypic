@@ -10,11 +10,11 @@
   <p align="center">
     Image editing, but wrong.
     <br />
-    <img src="images/demo.gif" alt="demos"  height="240" />
-    <br/>
     <a href="https://atypic.readthedocs.io/en/latest/#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
+    <img src="images/demo.gif" alt="demos"  height="240" />
+    <br/>
   </p>
 </div>
 
