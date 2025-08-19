@@ -1,10 +1,7 @@
 atypic package
 ==============
 
-Submodules
-----------
-
-atypic.effects module
+Effects module
 ---------------------
 
 .. automodule:: atypic.effects
@@ -12,18 +9,10 @@ atypic.effects module
    :show-inheritance:
    :undoc-members:
 
-atypic.mask module
+Mask module
 ------------------
 
 .. automodule:: atypic.mask
-   :members:
-   :show-inheritance:
-   :undoc-members:
-
-Module contents
----------------
-
-.. automodule:: atypic
    :members:
    :show-inheritance:
    :undoc-members:
