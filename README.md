@@ -4,6 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
+    <img src="images/demo.gif" alt="demos"  width="500" />
     <img src="images/logo.png" alt="Logo" width="160" height="160">
   </a>
 
@@ -14,7 +15,6 @@
     <a href="https://atypic.readthedocs.io/en/latest/#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <img src="images/demo.gif" alt="demos"  width="500" />
   </p>
 </div>
 
