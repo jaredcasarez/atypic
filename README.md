@@ -14,7 +14,7 @@
     <a href="https://atypic.readthedocs.io/en/latest/#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <img src="images/demo.gif" alt="demos"  width="250" />
   </p>
 </div>
 
