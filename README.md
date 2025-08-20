@@ -63,13 +63,13 @@ pip install opencv-python numpy
 
 ### Installation
 
-1. Clone the repo
+Clone the repo
    ```bash
    git clone https://github.com/jaredcasarez/atypic.git
    cd atypic
    ```
 
-2. Install the package
+Install the package
     ```bash
     pip install ./
     ```
