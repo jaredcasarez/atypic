@@ -4,17 +4,17 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="160" height="160">
+    <img src="images/logo.png" alt="Logo" width="240" height="240">
   </a>
-
 
   <p align="center">
     Image editing, but wrong.
     <br />
-    <a href="https://github.com/github_username/repo_name"><strong>Explore the docs »</strong></a>
+    <a href="https://atypic.readthedocs.io/en/latest/#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <a href="https://github.com/github_username/repo_name">View Demo</a>
+    <img src="images/demo.gif" alt="demos"  height="240" />
+    <br/>
   </p>
 </div>
 
@@ -90,7 +90,7 @@ from atypic.mask import Masker
 frame = cv2.imread("input.jpg") #load image frame
 masker = Masker(frame) #create blank mask
 masker.create_rectangle_mask((0.1,0.3),(0.7,0.7))
-corruption_effect = CorruptionEffect(frame, mask=masker.mask)
+corruption_effect = CorruptionEffect(frame, mask=masker.mask) #pass mask into effect initialization
 edited_frame = corruption_effect.apply()
 plt.axis("off")
 plt.imshow(cv2.cvtColor(edited_frame, cv2.COLOR_BGR2RGB))
@@ -108,7 +108,7 @@ Input            |  Output
 <!-- LICENSE -->
 ## License
 
-Distributed under the project_license. See `LICENSE.txt` for more information.
+Distributed under the MIT license. See `LICENSE.txt` for more information.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

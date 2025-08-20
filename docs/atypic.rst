@@ -19,4 +19,3 @@ Mask
    :members:
    :show-inheritance:
    :undoc-members:
-
