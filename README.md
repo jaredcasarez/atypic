@@ -65,7 +65,7 @@ pip install opencv-python numpy
 
 1. Clone the repo
    ```bash
-   git clone https://github.com/github_username/repo_name.git
+   git clone https://github.com/jaredcasarez/atypic.git
    cd atypic
    ```
 
@@ -84,13 +84,13 @@ pip install opencv-python numpy
 import cv2
 import matplotlib.pyplot as plt
 import numpy as np
-from atypic.effects import CorruptionEffect
+from atypic.effects import Corruption
 from atypic.mask import Masker
 
 frame = cv2.imread("input.jpg") #load image frame
 masker = Masker(frame) #create blank mask
 masker.create_rectangle_mask((0.1,0.3),(0.7,0.7))
-corruption_effect = CorruptionEffect(frame, mask=masker.mask) #pass mask into effect initialization
+corruption_effect = Corruption(frame, mask=masker.mask) #pass mask into effect initialization
 edited_frame = corruption_effect.apply()
 plt.axis("off")
 plt.imshow(cv2.cvtColor(edited_frame, cv2.COLOR_BGR2RGB))
@@ -123,9 +123,3 @@ Project Link: [https://github.com/jaredcasarez/atypic](https://github.com/jaredc
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-
-[license-shield]: https://img.shields.io/github/license/github_username/repo_name.svg?style=for-the-badge
-[license-url]: https://github.com/github_username/repo_name/blob/master/LICENSE.txt
