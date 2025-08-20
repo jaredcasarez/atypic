@@ -1,8 +1,6 @@
-atypic package
+atypic
 ==============
 
-
-----------
 
 Effects
 ---------------------
@@ -19,3 +17,4 @@ Mask
    :members:
    :show-inheritance:
    :undoc-members:
+

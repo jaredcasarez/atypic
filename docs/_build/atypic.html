@@ -1,0 +1,656 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>atypic &mdash; atypic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="atypic documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            atypic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">atypic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#module-atypic.effects">Effects</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.Effect"><code class="docutils literal notranslate"><span class="pre">Effect</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.Effect.blend"><code class="docutils literal notranslate"><span class="pre">Effect.blend()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.ColorChannelSplit"><code class="docutils literal notranslate"><span class="pre">ColorChannelSplit</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.ColorChannelSplit.apply"><code class="docutils literal notranslate"><span class="pre">ColorChannelSplit.apply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.ColorPaletteReduction"><code class="docutils literal notranslate"><span class="pre">ColorPaletteReduction</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.ColorPaletteReduction.apply"><code class="docutils literal notranslate"><span class="pre">ColorPaletteReduction.apply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.ColorValue"><code class="docutils literal notranslate"><span class="pre">ColorValue</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.ColorValue.apply"><code class="docutils literal notranslate"><span class="pre">ColorValue.apply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.Corruption"><code class="docutils literal notranslate"><span class="pre">Corruption</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.Corruption.apply"><code class="docutils literal notranslate"><span class="pre">Corruption.apply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.RollPixels"><code class="docutils literal notranslate"><span class="pre">RollPixels</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.RollPixels.apply"><code class="docutils literal notranslate"><span class="pre">RollPixels.apply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.RollPixelsRandom"><code class="docutils literal notranslate"><span class="pre">RollPixelsRandom</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.RollPixelsRandom.apply"><code class="docutils literal notranslate"><span class="pre">RollPixelsRandom.apply()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.effects.Sort"><code class="docutils literal notranslate"><span class="pre">Sort</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.effects.Sort.apply"><code class="docutils literal notranslate"><span class="pre">Sort.apply()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#module-atypic.mask">Mask</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#atypic.mask.Masker"><code class="docutils literal notranslate"><span class="pre">Masker</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_band"><code class="docutils literal notranslate"><span class="pre">Masker.create_band()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_checkerboard"><code class="docutils literal notranslate"><span class="pre">Masker.create_checkerboard()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_circle"><code class="docutils literal notranslate"><span class="pre">Masker.create_circle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_ellipse"><code class="docutils literal notranslate"><span class="pre">Masker.create_ellipse()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_polygon"><code class="docutils literal notranslate"><span class="pre">Masker.create_polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_rectangle"><code class="docutils literal notranslate"><span class="pre">Masker.create_rectangle()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_regular_polygon"><code class="docutils literal notranslate"><span class="pre">Masker.create_regular_polygon()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_star"><code class="docutils literal notranslate"><span class="pre">Masker.create_star()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_stripes"><code class="docutils literal notranslate"><span class="pre">Masker.create_stripes()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.create_whole_frame"><code class="docutils literal notranslate"><span class="pre">Masker.create_whole_frame()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.rotate"><code class="docutils literal notranslate"><span class="pre">Masker.rotate()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.mirror"><code class="docutils literal notranslate"><span class="pre">Masker.mirror()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.add"><code class="docutils literal notranslate"><span class="pre">Masker.add()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#atypic.mask.Masker.invert"><code class="docutils literal notranslate"><span class="pre">Masker.invert()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">atypic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">atypic</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/atypic.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="atypic">
+<h1>atypic<a class="headerlink" href="#atypic" title="Link to this heading"></a></h1>
+<section id="module-atypic.effects">
+<span id="effects"></span><h2>Effects<a class="headerlink" href="#module-atypic.effects" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.Effect">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Effect</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mask</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#Effect"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.Effect" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Base class for image/video effects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.</p></li>
+<li><p><strong>opacity</strong> (<em>int</em>) – Opacity of the effect (0-255). 255 is fully visible, 0 is invisible.</p></li>
+<li><p><strong>mask</strong> (<em>numpy.ndarray, optional</em>) – A mask (0-255) defining the region and strength to apply the effect.
+If None, the effect applies to the entire frame.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.Effect.blend">
+<span class="sig-name descname"><span class="pre">blend</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#Effect.blend"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.Effect.blend" title="Link to this definition"></a></dt>
+<dd><p>Blend the original frame and the effected frame using mask and opacity.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The blended frame.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>numpy.ndarray</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.ColorChannelSplit">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ColorChannelSplit</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split_distance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'row'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">order</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'bgr'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#ColorChannelSplit"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.ColorChannelSplit" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.Effect" title="atypic.effects.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Effect</span></code></a></p>
+<p>Apply a color channel split effect to an image frame.</p>
+<p>This effect shifts each color channel (B, G, R) by a specified distance.</p>
+<p>Initialize the effect with a frame, split distance, direction, and channel order.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.</p></li>
+<li><p><strong>split_distance</strong> (<em>int | float</em>) – Distance to shift each color channel. If float, it is interpreted as a proportion of the frame size.</p></li>
+<li><p><strong>which</strong> (<em>str</em>) – Direction of the split, either ‘row’ or ‘col’.</p></li>
+<li><p><strong>order</strong> (<em>str</em>) – Order of color channels to apply the effect on (‘bgr’, ‘rgb’, etc.).</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.ColorChannelSplit.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#ColorChannelSplit.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.ColorChannelSplit.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the color channel split effect to the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.ColorPaletteReduction">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ColorPaletteReduction</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_colors</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#ColorPaletteReduction"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.ColorPaletteReduction" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.Effect" title="atypic.effects.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Effect</span></code></a></p>
+<p>Apply a color palette reduction effect to an image frame.</p>
+<p>This effect reduces the number of colors in the frame to a specified number.</p>
+<p>Initialize the effect with a frame and number of colors.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.</p></li>
+<li><p><strong>num_colors</strong> (<em>int</em>) – Number of colors to reduce the frame to.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.ColorPaletteReduction.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#ColorPaletteReduction.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.ColorPaletteReduction.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the color palette reduction effect to the frame.</p>
+<p>This method quantizes each color channel to the specified number of colors.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.ColorValue">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ColorValue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_values</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">float</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">(0.2,</span> <span class="pre">0.2,</span> <span class="pre">0.2)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#ColorValue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.ColorValue" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.Effect" title="atypic.effects.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Effect</span></code></a></p>
+<p>Apply a color value shift effect to an image frame.</p>
+<p>This effect shifts the color values of the frame by a specified amount.</p>
+<p>Initialize the effect with a frame and shift value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.</p></li>
+<li><p><strong>shift_value</strong> (<em>tuple[float, float, float]</em>) – Amount to multiply the color values, for each channel (B, G, R).</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.ColorValue.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#ColorValue.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.ColorValue.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the color shift effect to the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.Corruption">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Corruption</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corruption_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'random'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bitsize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.01</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#Corruption"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.Corruption" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.Effect" title="atypic.effects.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Effect</span></code></a></p>
+<p>Apply a corruption effect to an image frame.</p>
+<p>This effect randomly corrupts blocks of pixels in the frame.</p>
+<p>Initialize the effect with a frame, corruption type, and bitsize.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.</p></li>
+<li><p><strong>corruption_type</strong> (<em>str</em>) – Type of corruption to apply (e.g., ‘random’).</p></li>
+<li><p><strong>bitsize</strong> (<em>int | float</em>) – Size of the corruption block. If float, it is
+interpreted as a proportion of the frame size.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.Corruption.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#Corruption.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.Corruption.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the corruption effect to the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.RollPixels">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RollPixels</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'row'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_length</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#RollPixels"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.RollPixels" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.Effect" title="atypic.effects.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Effect</span></code></a></p>
+<p>Apply a pixel roll effect to an image frame.</p>
+<p>Initialize the effect with a frame, direction, and shift length.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.
+which (str): Direction of the roll, either ‘row’ or ‘col’.</p></li>
+<li><p><strong>shift_length</strong> (<em>int | float</em>) – Length of the pixel shift. If float, it is interpreted as a proportion of the frame size.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.RollPixels.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#RollPixels.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.RollPixels.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the pixel roll effect to the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.RollPixelsRandom">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">RollPixelsRandom</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'row'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">group_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.2</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">shift_range</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(0.1,</span> <span class="pre">0.1)</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#RollPixelsRandom"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.RollPixelsRandom" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.RollPixels" title="atypic.effects.RollPixels"><code class="xref py py-class docutils literal notranslate"><span class="pre">RollPixels</span></code></a></p>
+<p>Apply a random pixel roll effect to an image frame.</p>
+<p>This effect randomly shifts blocks of pixels in either rows or columns.</p>
+<p>Initialize the effect with a frame, direction, group size, and shift range.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.</p></li>
+<li><p><strong>which</strong> (<em>str</em>) – Direction of the roll, either ‘row’ or ‘col’.</p></li>
+<li><p><strong>group_size</strong> (<em>int | float</em>) – Size of the pixel block to shift. If float, it is interpreted as a proportion of the frame size.</p></li>
+<li><p><strong>shift_range</strong> (<em>tuple[int | float, int | float]</em>) – Range of random shifts. If floats, they are interpreted as proportions of the frame size.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.RollPixelsRandom.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#RollPixelsRandom.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.RollPixelsRandom.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the random pixel roll effect to the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.effects.Sort">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Sort</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">which</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'row'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sort_by</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'value'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">reverse</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#Sort"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.Sort" title="Link to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#atypic.effects.Effect" title="atypic.effects.Effect"><code class="xref py py-class docutils literal notranslate"><span class="pre">Effect</span></code></a></p>
+<p>Apply a sorting effect to an image frame.</p>
+<p>This effect sorts pixels in a specified direction (row or column) based on their color values.</p>
+<p>Initialize the effect with a frame, direction, sorting criteria, and reverse flag.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>numpy.ndarray</em>) – The video frame to apply the effect on.
+which (str): Direction of the sort, either ‘row’ or ‘col’.</p></li>
+<li><p><strong>sort_by</strong> (<em>str</em>) – Criteria to sort by (‘value’, ‘r’, ‘g’,
+‘b’). If ‘value’, sorts by average color value; if ‘r’, ‘g’, or ‘b’, sorts by that channel.</p></li>
+<li><p><strong>reverse</strong> (<em>bool</em>) – If True, reverses the sort order.</p></li>
+<li><p><strong>**kwargs</strong> – Additional keyword arguments for the Effect base class.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.effects.Sort.apply">
+<span class="sig-name descname"><span class="pre">apply</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/effects.html#Sort.apply"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.effects.Sort.apply" title="Link to this definition"></a></dt>
+<dd><p>Apply the sorting effect to the frame.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-atypic.mask">
+<span id="mask"></span><h2>Mask<a class="headerlink" href="#module-atypic.mask" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="atypic.mask.Masker">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Masker</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">frame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'add'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A class to create and manage masks for video frames.</p>
+<p>It allows for the creation of various shapes and patterns as masks, which can be applied to video frames.
+The masks can be combined using different behaviors such as ‘or’, ‘and’, ‘xor’, ‘nand’, and ‘nor’.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>frame</strong> (<em>np.ndarray</em>) – The video frame to apply masks to.</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – The default behavior for combining masks (‘or’, ‘and’, ‘xor’, ‘nand’, ‘nor’).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_band">
+<span class="sig-name descname"><span class="pre">create_band</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'horizontal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">start</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">end</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_band"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_band" title="Link to this definition"></a></dt>
+<dd><p>Create a horizontal or vertical band mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orientation</strong> (<em>str</em>) – ‘horizontal’ or ‘vertical’</p></li>
+<li><p><strong>start</strong> (<em>int | float</em>) – Starting index of the band</p></li>
+<li><p><strong>end</strong> (<em>int | float, optional</em>) – Ending index of the band (defaults to frame edge)</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the band mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_checkerboard">
+<span class="sig-name descname"><span class="pre">create_checkerboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">block_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_checkerboard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_checkerboard" title="Link to this definition"></a></dt>
+<dd><p>Create a checkerboard pattern mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>block_size</strong> (<em>int | float</em>) – Size of each square block</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the checkerboard mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_circle">
+<span class="sig-name descname"><span class="pre">create_circle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_circle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_circle" title="Link to this definition"></a></dt>
+<dd><p>Create a circular mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (x, y) coordinates of the circle center</p></li>
+<li><p><strong>radius</strong> (<em>int | float</em>) – Radius of the circle</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the circular mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_ellipse">
+<span class="sig-name descname"><span class="pre">create_ellipse</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">axes</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">angle</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_ellipse"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_ellipse" title="Link to this definition"></a></dt>
+<dd><p>Create an elliptical mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (x, y) coordinates of the ellipse center</p></li>
+<li><p><strong>axes</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (major_axis_length, minor_axis_length)</p></li>
+<li><p><strong>angle</strong> (<em>float, optional</em>) – Rotation angle of the ellipse in degrees</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the elliptical mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_polygon">
+<span class="sig-name descname"><span class="pre">create_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">points</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_polygon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_polygon" title="Link to this definition"></a></dt>
+<dd><p>Create a polygonal mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>points</strong> (<em>list[tuple[int, int] | tuple[float, float]]</em>) – List of (x, y) coordinates defining the polygon vertices</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the polygon mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_rectangle">
+<span class="sig-name descname"><span class="pre">create_rectangle</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">top_left</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bottom_right</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_rectangle"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_rectangle" title="Link to this definition"></a></dt>
+<dd><p>Create a rectangular mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>top_left</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (x, y) coordinates of the top-left corner</p></li>
+<li><p><strong>bottom_right</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (x, y) coordinates of the bottom-right corner</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the rectangular mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_regular_polygon">
+<span class="sig-name descname"><span class="pre">create_regular_polygon</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sides</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_regular_polygon"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_regular_polygon" title="Link to this definition"></a></dt>
+<dd><p>Create a regular polygon mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (x, y) coordinates of the polygon center</p></li>
+<li><p><strong>radius</strong> (<em>int | float</em>) – Radius of the circumscribed circle</p></li>
+<li><p><strong>sides</strong> (<em>int</em>) – Number of sides of the polygon</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the regular polygon mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_star">
+<span class="sig-name descname"><span class="pre">create_star</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">center</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radius</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">points</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_star"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_star" title="Link to this definition"></a></dt>
+<dd><p>Create a star-shaped mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>center</strong> (<em>tuple[int, int] | tuple[float, float]</em>) – (x, y) coordinates of the star center</p></li>
+<li><p><strong>radius</strong> (<em>int | float</em>) – Radius of the star points</p></li>
+<li><p><strong>points</strong> (<em>int</em>) – Number of points in the star</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the star-shaped mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_stripes">
+<span class="sig-name descname"><span class="pre">create_stripes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">orientation</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'horizontal'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stripe_width</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_stripes"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_stripes" title="Link to this definition"></a></dt>
+<dd><p>Create a striped mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>orientation</strong> (<em>str</em>) – ‘horizontal’ or ‘vertical’</p></li>
+<li><p><strong>stripe_width</strong> (<em>int | float</em>) – Width of each stripe</p></li>
+<li><p><strong>gap</strong> (<em>int | float</em>) – Gap between stripes</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with the striped mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.create_whole_frame">
+<span class="sig-name descname"><span class="pre">create_whole_frame</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">opacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">255</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.create_whole_frame"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.create_whole_frame" title="Link to this definition"></a></dt>
+<dd><p>Create a mask that covers the entire frame.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A Masker instance with a mask covering the entire frame.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.rotate">
+<span class="sig-name descname"><span class="pre">rotate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">angle</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.rotate"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.rotate" title="Link to this definition"></a></dt>
+<dd><p>Rotate the instance mask element by a specified angle.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>angle</strong> (<em>float</em>) – The angle in degrees to rotate the mask.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.mirror">
+<span class="sig-name descname"><span class="pre">mirror</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">axis</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'vertical'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.mirror"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.mirror" title="Link to this definition"></a></dt>
+<dd><p>Mirror a given mask element in the specified direction.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mask_element</strong> (<em>Masker</em>) – The Masker instance containing the mask to be mirrored.</p></li>
+<li><p><strong>axis</strong> (<em>str</em>) – ‘horizontal’ or ‘vertical’</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.add">
+<span class="sig-name descname"><span class="pre">add</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">mask_elements</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">behavior</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.add"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.add" title="Link to this definition"></a></dt>
+<dd><p>Combine multiple mask elements into a single mask and add them to current Masker instance.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>*mask_elements</strong> (<em>Masker</em>) – The Masker instances to combine.</p></li>
+<li><p><strong>behavior</strong> (<em>str, optional</em>) – Masker combination behavior</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A new Masker instance containing the combined mask.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><a class="reference internal" href="#atypic.mask.Masker" title="atypic.mask.Masker">Masker</a></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="atypic.mask.Masker.invert">
+<span class="sig-name descname"><span class="pre">invert</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/atypic/mask.html#Masker.invert"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#atypic.mask.Masker.invert" title="Link to this definition"></a></dt>
+<dd><p>Invert the current mask of the Masker instance.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="atypic documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jared Casarez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

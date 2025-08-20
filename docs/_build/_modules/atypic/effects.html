@@ -1,0 +1,586 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>atypic.effects &mdash; atypic  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+      <script src="../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            atypic
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../atypic.html">atypic</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">atypic</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">atypic.effects</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for atypic.effects</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">cv2</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Module for image/video effects.</span>
+
+<span class="sd">This module provides various effects that can be applied to image frames, such as color channel splitting,</span>
+<span class="sd">color palette reduction, color value shifting, pixel corruption, pixel rolling, and sorting.</span>
+<span class="sd">Each effect is implemented as a subclass of the `Effect` base class, which handles the initialization</span>
+<span class="sd">and application of the effect to a given frame.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+
+<div class="viewcode-block" id="Effect">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.Effect">[docs]</a>
+<span class="k">class</span> <span class="nc">Effect</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Base class for image/video effects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">opacity</span><span class="o">=</span><span class="mi">255</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">            opacity (int): Opacity of the effect (0-255). 255 is fully visible, 0 is invisible.</span>
+<span class="sd">            mask (numpy.ndarray, optional): A mask (0-255) defining the region and strength to apply the effect.</span>
+<span class="sd">                If None, the effect applies to the entire frame.</span>
+<span class="sd">                </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">frame</span> <span class="o">=</span> <span class="n">frame</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">mask</span> <span class="k">if</span> <span class="n">mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span><span class="o">+</span><span class="mi">255</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">opacity</span> <span class="o">=</span> <span class="n">opacity</span>
+
+<div class="viewcode-block" id="Effect.blend">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.Effect.blend">[docs]</a>
+    <span class="k">def</span> <span class="nf">blend</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Blend the original frame and the effected frame using mask and opacity.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            numpy.ndarray: The blended frame.</span>
+<span class="sd">            </span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Compute per-pixel alpha: mask (0-255) * opacity (0-255) / 255</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">opacity</span> <span class="o">/</span> <span class="mf">255.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">255.0</span>
+        <span class="c1"># Expand alpha to shape (H, W, 1) for broadcasting</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># Blend: out = frame * (1 - alpha) + effected * alpha</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">alpha</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">alpha</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="n">blended</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">alpha</span><span class="p">)</span>
+            <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span> <span class="o">*</span> <span class="n">alpha</span>
+        <span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">blended</span><span class="p">)</span> <span class="o">//</span> <span class="mi">2</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">blended</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">//</span> <span class="mi">2</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">blended</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ColorChannelSplit">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.ColorChannelSplit">[docs]</a>
+<span class="k">class</span> <span class="nc">ColorChannelSplit</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a color channel split effect to an image frame.</span>
+<span class="sd">    </span>
+<span class="sd">    This effect shifts each color channel (B, G, R) by a specified distance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">split_distance</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;bgr&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame, split distance, direction, and channel order.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">            split_distance (int | float): Distance to shift each color channel. If float, it is interpreted as a proportion of the frame size.</span>
+<span class="sd">            which (str): Direction of the split, either &#39;row&#39; or &#39;col&#39;.</span>
+<span class="sd">            order (str): Order of color channels to apply the effect on (&#39;bgr&#39;, &#39;rgb&#39;, etc.).</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">split_distance</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">split_distance</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">split_distance</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">split_distance</span> <span class="o">=</span> <span class="n">split_distance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">=</span> <span class="n">which</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">order</span> <span class="o">=</span> <span class="n">order</span>
+
+    <span class="k">def</span> <span class="nf">_shift_color_channel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">channel</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shift a single color channel by the specified distance.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            channel (numpy.ndarray): The color channel to shift.</span>
+<span class="sd">            shift (int): The distance to shift the channel.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span>
+            <span class="c1"># Iterate over rows with mask coverage</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">row_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="c1"># Only roll masked pixels in the row</span>
+                <span class="n">row</span> <span class="o">=</span> <span class="n">channel</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">row</span><span class="p">[</span><span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">row</span><span class="p">[</span><span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shift</span><span class="p">)</span>
+                <span class="n">channel</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">row</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;col&quot;</span><span class="p">:</span>
+            <span class="c1"># Iterate over columns with mask coverage</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">col_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="n">col</span> <span class="o">=</span> <span class="n">channel</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">col</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">col</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shift</span><span class="p">)</span>
+                <span class="n">channel</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">col</span>
+
+<div class="viewcode-block" id="ColorChannelSplit.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.ColorChannelSplit.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the color channel split effect to the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">channel_lookup</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># OpenCV uses BGR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">channel</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="p">:</span>
+            <span class="n">channel_index</span> <span class="o">=</span> <span class="n">channel_lookup</span><span class="p">[</span><span class="n">channel</span><span class="p">]</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">split_distance</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">order</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">channel</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_shift_color_channel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">channel_index</span><span class="p">],</span> <span class="n">shift</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ColorPaletteReduction">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.ColorPaletteReduction">[docs]</a>
+<span class="k">class</span> <span class="nc">ColorPaletteReduction</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a color palette reduction effect to an image frame.</span>
+<span class="sd">    </span>
+<span class="sd">    This effect reduces the number of colors in the frame to a specified number.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">num_colors</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame and number of colors.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">            num_colors (int): Number of colors to reduce the frame to.</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_colors</span> <span class="o">=</span> <span class="n">num_colors</span>
+
+<div class="viewcode-block" id="ColorPaletteReduction.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.ColorPaletteReduction.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the color palette reduction effect to the frame.</span>
+<span class="sd">        </span>
+<span class="sd">        This method quantizes each color channel to the specified number of colors.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">levels</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">255</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_colors</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">quantized</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]):</span>
+            <span class="n">channel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">]</span>
+            <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">digitize</span><span class="p">(</span><span class="n">channel</span><span class="p">,</span> <span class="n">levels</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">quantized</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">levels</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">quantized</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ColorValue">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.ColorValue">[docs]</a>
+<span class="k">class</span> <span class="nc">ColorValue</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a color value shift effect to an image frame.</span>
+<span class="sd">    </span>
+<span class="sd">    This effect shifts the color values of the frame by a specified amount.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">frame</span><span class="p">,</span>
+        <span class="n">shift_values</span><span class="p">:</span> <span class="p">(</span>
+            <span class="nb">tuple</span><span class="p">[</span><span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">,</span> <span class="nb">int</span><span class="p">]</span> <span class="o">|</span> <span class="nb">tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]</span>
+        <span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame and shift value.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">            shift_value (tuple[float, float, float]): Amount to multiply the color values, for each channel (B, G, R).</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shift_values</span> <span class="o">=</span> <span class="n">shift_values</span>
+
+<div class="viewcode-block" id="ColorValue.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.ColorValue.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the color shift effect to the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">out</span> <span class="o">=</span> <span class="n">cv2</span><span class="o">.</span><span class="n">multiply</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_values</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">))</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;shift_values must either be convertible to float or all int types.&quot;</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="Corruption">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.Corruption">[docs]</a>
+<span class="k">class</span> <span class="nc">Corruption</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a corruption effect to an image frame.</span>
+<span class="sd">    </span>
+<span class="sd">    This effect randomly corrupts blocks of pixels in the frame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">corruption_type</span><span class="o">=</span><span class="s2">&quot;random&quot;</span><span class="p">,</span> <span class="n">bitsize</span><span class="o">=</span><span class="mf">0.01</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame, corruption type, and bitsize.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">            corruption_type (str): Type of corruption to apply (e.g., &#39;random&#39;).</span>
+<span class="sd">            bitsize (int | float): Size of the corruption block. If float, it is</span>
+<span class="sd">                interpreted as a proportion of the frame size.</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corruption_type</span> <span class="o">=</span> <span class="n">corruption_type</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bitsize</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">bitsize</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">bitsize</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bitsize</span> <span class="o">=</span> <span class="n">bitsize</span>
+
+<div class="viewcode-block" id="Corruption.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.Corruption.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the corruption effect to the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corruption_type</span> <span class="o">==</span> <span class="s2">&quot;random&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitsize</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitsize</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">row</span> <span class="p">:</span> <span class="n">row</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitsize</span><span class="p">,</span> <span class="n">col</span> <span class="p">:</span> <span class="n">col</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">bitsize</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span>
+                        <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">256</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+                    <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown corruption type: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">corruption_type</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RollPixels">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.RollPixels">[docs]</a>
+<span class="k">class</span> <span class="nc">RollPixels</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a pixel roll effect to an image frame.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">shift_length</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame, direction, and shift length.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">                which (str): Direction of the roll, either &#39;row&#39; or &#39;col&#39;.</span>
+<span class="sd">            shift_length (int | float): Length of the pixel shift. If float, it is interpreted as a proportion of the frame size.</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">=</span> <span class="n">which</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shift_length</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">shift_length</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">shift_length</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shift_length</span> <span class="o">=</span> <span class="n">shift_length</span>
+
+<div class="viewcode-block" id="RollPixels.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.RollPixels.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the pixel roll effect to the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_row_shift</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;col&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_col_shift</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_row_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shift pixels in each row by the specified length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift_length</span>
+            <span class="n">row_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">region_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">]</span>
+                    <span class="n">region_pixels</span><span class="p">[</span><span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span>
+                        <span class="n">region_pixels</span><span class="p">[</span><span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shift</span>
+                    <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_col_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shift pixels in each column by the specified length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift_length</span>
+            <span class="n">col_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                    <span class="n">region_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[:,</span> <span class="n">j</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span>
+                    <span class="n">region_pixels</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span>
+                        <span class="n">region_pixels</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shift</span>
+                    <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="RollPixelsRandom">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.RollPixelsRandom">[docs]</a>
+<span class="k">class</span> <span class="nc">RollPixelsRandom</span><span class="p">(</span><span class="n">RollPixels</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a random pixel roll effect to an image frame.</span>
+<span class="sd">    </span>
+<span class="sd">    This effect randomly shifts blocks of pixels in either rows or columns.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">group_size</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">shift_range</span><span class="o">=</span><span class="p">(</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.1</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame, direction, group size, and shift range.</span>
+<span class="sd">        </span>
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">            which (str): Direction of the roll, either &#39;row&#39; or &#39;col&#39;.</span>
+<span class="sd">            group_size (int | float): Size of the pixel block to shift. If float, it is interpreted as a proportion of the frame size.</span>
+<span class="sd">            shift_range (tuple[int | float, int | float]): Range of random shifts. If floats, they are interpreted as proportions of the frame size.</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">=</span> <span class="n">which</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">group_size</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+            <span class="n">group_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">group_size</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span> <span class="o">=</span> <span class="n">group_size</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">end</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="k">for</span> <span class="n">end</span> <span class="ow">in</span> <span class="n">shift_range</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+            <span class="n">shift_range</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="o">-</span><span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">shift_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span>
+                <span class="nb">int</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span> <span class="o">*</span> <span class="n">shift_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span>
+            <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shift_range</span> <span class="o">=</span> <span class="n">shift_range</span>
+
+<div class="viewcode-block" id="RollPixelsRandom.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.RollPixelsRandom.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Apply the random pixel roll effect to the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nrows</span><span class="p">,</span> <span class="n">ncols</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_random_row_shift</span><span class="p">(</span><span class="n">nrows</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;col&quot;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_random_col_shift</span><span class="p">(</span><span class="n">ncols</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_random_row_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nrows</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shift blocks of pixels in each row by a random amount within the specified range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">block_starts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">i</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nrows</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span> <span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span><span class="p">,</span> <span class="n">nrows</span><span class="p">),</span> <span class="p">:]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">block_starts</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span><span class="p">,</span> <span class="n">nrows</span><span class="p">)</span>
+            <span class="n">block_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">end</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_range</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">region_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">:</span><span class="n">end</span><span class="p">,</span> <span class="p">:,</span> <span class="n">c</span><span class="p">]</span>
+                <span class="n">region_pixels</span><span class="p">[</span><span class="n">block_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span>
+                    <span class="n">region_pixels</span><span class="p">[</span><span class="n">block_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shift</span>
+                <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_random_col_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ncols</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Shift blocks of pixels in each column by a random amount within the specified range.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">block_starts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">j</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[:,</span> <span class="n">j</span> <span class="p">:</span> <span class="nb">min</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">block_starts</span><span class="p">:</span>
+            <span class="n">end</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">group_size</span><span class="p">,</span> <span class="n">ncols</span><span class="p">)</span>
+            <span class="n">block_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[:,</span> <span class="n">j</span><span class="p">:</span><span class="n">end</span><span class="p">]</span>
+            <span class="n">shift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">shift_range</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">):</span>
+                <span class="n">region_pixels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[:,</span> <span class="n">j</span><span class="p">:</span><span class="n">end</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span>
+                <span class="n">region_pixels</span><span class="p">[</span><span class="n">block_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span>
+                    <span class="n">region_pixels</span><span class="p">[</span><span class="n">block_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">shift</span>
+                <span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="Sort">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.Sort">[docs]</a>
+<span class="k">class</span> <span class="nc">Sort</span><span class="p">(</span><span class="n">Effect</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Apply a sorting effect to an image frame.</span>
+<span class="sd">    </span>
+<span class="sd">    This effect sorts pixels in a specified direction (row or column) based on their color values.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">frame</span><span class="p">,</span> <span class="n">which</span><span class="o">=</span><span class="s2">&quot;row&quot;</span><span class="p">,</span> <span class="n">sort_by</span><span class="o">=</span><span class="s2">&quot;value&quot;</span><span class="p">,</span> <span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Initialize the effect with a frame, direction, sorting criteria, and reverse flag.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            frame (numpy.ndarray): The video frame to apply the effect on.</span>
+<span class="sd">                which (str): Direction of the sort, either &#39;row&#39; or &#39;col&#39;.</span>
+<span class="sd">            sort_by (str): Criteria to sort by (&#39;value&#39;, &#39;r&#39;, &#39;g&#39;,</span>
+<span class="sd">                &#39;b&#39;). If &#39;value&#39;, sorts by average color value; if &#39;r&#39;, &#39;g&#39;, or &#39;b&#39;, sorts by that channel.</span>
+<span class="sd">            reverse (bool): If True, reverses the sort order.</span>
+<span class="sd">            **kwargs: Additional keyword arguments for the Effect base class.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">frame</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">=</span> <span class="n">which</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span> <span class="o">=</span> <span class="n">sort_by</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span> <span class="o">=</span> <span class="n">reverse</span>
+
+<div class="viewcode-block" id="Sort.apply">
+<a class="viewcode-back" href="../../atypic.html#atypic.effects.Sort.apply">[docs]</a>
+    <span class="k">def</span> <span class="nf">apply</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Apply the sorting effect to the frame.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lookup</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;r&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;g&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;b&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">}</span>  <span class="c1"># OpenCV uses BGR</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span> <span class="o">==</span> <span class="s2">&quot;value&quot;</span><span class="p">:</span>
+            <span class="n">sort_row_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">rm</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">][</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="p">]</span>
+            <span class="n">sort_col_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">j</span><span class="p">,</span> <span class="n">rm</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))</span>
+            <span class="p">]</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="n">lookup</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="n">sort_row_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">i</span><span class="p">,</span> <span class="n">rm</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">][</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">][:,</span> <span class="n">lookup</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span><span class="p">]])</span>
+            <span class="p">]</span>
+            <span class="n">sort_col_func</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">j</span><span class="p">,</span> <span class="n">rm</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">][</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">frame</span><span class="p">[</span><span class="n">rm</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">][:,</span> <span class="n">lookup</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">sort_by</span><span class="p">]])</span>
+            <span class="p">]</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;row&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">row_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort_row_func</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">row_mask</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span>
+                            <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">row_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+                        <span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">which</span> <span class="o">==</span> <span class="s2">&quot;col&quot;</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))[</span><span class="mi">0</span><span class="p">]:</span>
+                <span class="n">col_mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">sort_col_func</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">col_mask</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reverse</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out</span><span class="p">[</span><span class="n">col_mask</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">blend</span><span class="p">()</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Jared Casarez.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

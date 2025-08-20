@@ -18,6 +18,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.todo',
     'sphinx_rtd_theme',
+    'sphinx.ext.napoleon'
 ]
 
 templates_path = ['_templates']
@@ -27,7 +28,7 @@ language = 'en'
 
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
-
+napoleon_use_param = False
 html_theme = 'sphinx_rtd_theme'
 autoclass_content = 'both'
 autodoc_member_order = 'bysource'
@@ -42,6 +43,6 @@ todo_include_todos = True
 import sys
 import os 
 
-sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../src'))
 print(sys.path)
 print(sys.executable)

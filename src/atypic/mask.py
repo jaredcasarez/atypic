@@ -2,15 +2,14 @@ import cv2
 import numpy as np
 
 """
-mask.py
 This module provides classes and methods for creating and managing masks for image effects.
-It includes the `Masker` class for creating various shapes and patterns as masks.
 """
 
 
 class Masker:
     """
     A class to create and manage masks for video frames.
+    
     It allows for the creation of various shapes and patterns as masks, which can be applied to video frames.
     The masks can be combined using different behaviors such as 'or', 'and', 'xor', 'nand', and 'nor'.
     """
@@ -28,6 +27,7 @@ class Masker:
     def _process_behavior(self, mask_element, behavior=None, opacity=255):
         """
         Process the mask element based on the specified behavior.
+        
         Args:
             mask_element (Masker): The Masker instance containing the mask to be processed.
             behavior (str, optional): The behavior to apply when combining submasks ('or', 'and', 'xor', 'nand', 'nor'). If None, uses the default behavior set during initialization.
@@ -53,11 +53,13 @@ class Masker:
     def create_band(self, orientation="horizontal", start=0, end=None, behavior=None, opacity=255):
         """
         Create a horizontal or vertical band mask.
+        
         Args:
             orientation (str): 'horizontal' or 'vertical'
             start (int | float): Starting index of the band
             end (int | float, optional): Ending index of the band (defaults to frame edge)
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the band mask.
         """
@@ -84,9 +86,11 @@ class Masker:
     def create_checkerboard(self, block_size=10, behavior=None, opacity=255):
         """
         Create a checkerboard pattern mask.
+        
         Args:
             block_size (int | float): Size of each square block
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the checkerboard mask.
         """
@@ -107,10 +111,12 @@ class Masker:
     def create_circle(self, center, radius, behavior=None, opacity=255):
         """
         Create a circular mask.
+        
         Args:
             center (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the circle center
             radius (int | float): Radius of the circle
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the circular mask.
         """
@@ -129,11 +135,13 @@ class Masker:
     def create_ellipse(self, center, axes, angle=0, behavior=None, opacity=255):
         """
         Create an elliptical mask.
+        
         Args:
             center (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the ellipse center
             axes (tuple[int, int] | tuple[float, float]): (major_axis_length, minor_axis_length)
             angle (float, optional): Rotation angle of the ellipse in degrees
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the elliptical mask.
         """
@@ -155,9 +163,11 @@ class Masker:
     def create_polygon(self, points, behavior=None, opacity=255):
         """
         Create a polygonal mask.
+        
         Args:
             points (list[tuple[int, int] | tuple[float, float]]): List of (x, y) coordinates defining the polygon vertices
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the polygon mask.
         """
@@ -180,10 +190,12 @@ class Masker:
     def create_rectangle(self, top_left, bottom_right, behavior=None, opacity=255):
         """
         Create a rectangular mask.
+        
         Args:
             top_left (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the top-left corner
             bottom_right (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the bottom-right corner
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the rectangular mask.
         """
@@ -219,11 +231,13 @@ class Masker:
     def create_regular_polygon(self, center, radius, sides=3, behavior=None, opacity=255):
         """
         Create a regular polygon mask.
+        
         Args:
             center (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the polygon center
             radius (int | float): Radius of the circumscribed circle
             sides (int): Number of sides of the polygon
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the regular polygon mask.
         """
@@ -255,11 +269,13 @@ class Masker:
     def create_star(self, center, radius, points=5, behavior=None, opacity=255):
         """
         Create a star-shaped mask.
+        
         Args:
             center (tuple[int, int] | tuple[float, float]): (x, y) coordinates of the star center
             radius (int | float): Radius of the star points
             points (int): Number of points in the star
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the star-shaped mask.
         """
@@ -296,11 +312,13 @@ class Masker:
     ):
         """
         Create a striped mask.
+        
         Args:
             orientation (str): 'horizontal' or 'vertical'
             stripe_width (int | float): Width of each stripe
             gap (int | float): Gap between stripes
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with the striped mask.
         """
@@ -325,8 +343,10 @@ class Masker:
     def create_whole_frame(self, behavior=None, opacity=255):
         """
         Create a mask that covers the entire frame.
+        
         Args:
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A Masker instance with a mask covering the entire frame.
         """
@@ -339,6 +359,7 @@ class Masker:
     def rotate(self, angle):
         """
         Rotate the instance mask element by a specified angle.
+        
         Args:
             angle (float): The angle in degrees to rotate the mask.
         """
@@ -357,9 +378,6 @@ class Masker:
         Parameters:
             mask_element (Masker): The Masker instance containing the mask to be mirrored.
             axis (str): 'horizontal' or 'vertical'
-
-        Returns:
-            Masker: The Masker instance with the mirrored mask.
         """
         if axis == "horizontal":
             mirrored_mask = cv2.flip(self.mask, 1)
@@ -372,9 +390,11 @@ class Masker:
     def add(self, *mask_elements, behavior=None):
         """
         Combine multiple mask elements into a single mask and add them to current Masker instance.
+        
         Args:
             *mask_elements (Masker): The Masker instances to combine.
             behavior (str, optional): Masker combination behavior
+            
         Returns:
             Masker: A new Masker instance containing the combined mask.
         """
@@ -388,6 +408,5 @@ class Masker:
     def invert(self):
         """
         Invert the current mask of the Masker instance.
-        This method flips the mask values, turning 0s into 255s and vice versa.
         """
-        self.mask = cv2.bitwise_not(self.mask)
+        self.mask = cv2.invert(self.mask)
