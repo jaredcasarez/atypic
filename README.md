@@ -71,7 +71,6 @@ Clone the repo
 
 Install the package
 ```bash
-cd atypic
 pip install .
 ```
     
