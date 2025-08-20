@@ -59,7 +59,6 @@ Install dependencies:
 pip install opencv-python numpy
 ```
 
----
 
 ### Installation
 
