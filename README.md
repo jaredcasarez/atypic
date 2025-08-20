@@ -64,16 +64,17 @@ pip install opencv-python numpy
 ### Installation
 
 Clone the repo
-   ```bash
-   git clone https://github.com/jaredcasarez/atypic.git
-   cd atypic
-   ```
-
+ ```bash
+ git clone https://github.com/jaredcasarez/atypic.git
+ cd atypic
+ ```
+<br />
 
 Install the package
-    ```bash
-    pip install ./
-    ```
+```bash
+cd atypic
+pip install .
+```
     
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
