@@ -65,8 +65,6 @@ class ColorChannelSplit(Effect):
 
     def __init__(self, frame, split_distance=0.1, which="row", order="bgr", **kwargs):
         """
-        Initialize the effect with a frame, split distance, direction, and channel order.
-        
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
             split_distance (int | float): Distance to shift each color channel. If float, it is interpreted as a proportion of the frame size.
@@ -129,8 +127,6 @@ class ColorPaletteReduction(Effect):
 
     def __init__(self, frame, num_colors=4, **kwargs):
         """
-        Initialize the effect with a frame and number of colors.
-        
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
             num_colors (int): Number of colors to reduce the frame to.
@@ -158,8 +154,6 @@ class ColorPaletteReduction(Effect):
 class ColorValue(Effect):
     """
     Apply a color value shift effect to an image frame.
-    
-    This effect shifts the color values of the frame by a specified amount.
     """
 
     def __init__(
@@ -171,8 +165,6 @@ class ColorValue(Effect):
         **kwargs,
     ):
         """
-        Initialize the effect with a frame and shift value.
-        
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
             shift_value (tuple[float, float, float]): Amount to multiply the color values, for each channel (B, G, R).
@@ -203,8 +195,6 @@ class Corruption(Effect):
 
     def __init__(self, frame, corruption_type="random", bitsize=0.01, **kwargs):
         """
-        Initialize the effect with a frame, corruption type, and bitsize.
-        
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
             corruption_type (str): Type of corruption to apply (e.g., 'random').
@@ -240,8 +230,6 @@ class RollPixels(Effect):
 
     def __init__(self, frame, which="row", shift_length=0.1, **kwargs):
         """
-        Initialize the effect with a frame, direction, and shift length.
-        
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
                 which (str): Direction of the roll, either 'row' or 'col'.
@@ -304,8 +292,6 @@ class RollPixelsRandom(RollPixels):
         self, frame, which="row", group_size=0.2, shift_range=(0.1, 0.1), **kwargs
     ):
         """
-        Initialize the effect with a frame, direction, group size, and shift range.
-        
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
             which (str): Direction of the roll, either 'row' or 'col'.
@@ -384,8 +370,6 @@ class Sort(Effect):
 
     def __init__(self, frame, which="row", sort_by="value", reverse=False, **kwargs):
         """
-        Initialize the effect with a frame, direction, sorting criteria, and reverse flag.
-
         Args:
             frame (numpy.ndarray): The video frame to apply the effect on.
                 which (str): Direction of the sort, either 'row' or 'col'.
