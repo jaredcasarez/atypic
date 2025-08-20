@@ -69,10 +69,12 @@ Clone the repo
    cd atypic
    ```
 
+
 Install the package
     ```bash
     pip install ./
     ```
+    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
