@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/github_username/repo_name">
-    <img src="images/logo.png" alt="Logo" width="240" height="240">
+    <img src="resources/logo.png" alt="Logo" width="240" height="240">
   </a>
 
   <p align="center">
@@ -13,7 +13,7 @@
     <a href="https://atypic.readthedocs.io/en/latest/#"><strong>Explore the docs »</strong></a>
     <br />
     <br />
-    <img src="images/demo.gif" alt="demos"  height="240" />
+    <img src="resources/demo.gif" alt="demos"  height="240" />
     <br/>
   </p>
 </div>
@@ -98,7 +98,7 @@ plt.imshow(cv2.cvtColor(edited_frame, cv2.COLOR_BGR2RGB))
 
 Input            |  Output
 :-------------------------:|:-------------------------:
-![input](images/test_image_1.jpg)  |  ![output](images/basic_usage.jpg)
+![input](resources/test_image_1.jpg)  |  ![output](resources/basic_usage.jpg)
 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

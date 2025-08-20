@@ -1,10 +1,6 @@
 .github/copilot-instructions.md
-atypic/__pycache__/__init__.cpython-313.pyc
-atypic/__pycache__/effects.cpython-313.pyc
-atypic/__pycache__/glitch.cpython-313.pyc
-atypic/__pycache__/mask.cpython-313.pyc
-tests/__pycache__/test_atypic.cpython-312-pytest-8.2.0.pyc
-tests/__pycache__/test_atypic.cpython-313-pytest-8.4.1.pyc
-tests/__pycache__/test_glitch.cpython-313-pytest-8.4.1.pyc
-test.ipynb
-atypic/__pycache__/*
+tests/*
+**/__pycache__/*
+dist/*
+.venv/*
+gif/*
