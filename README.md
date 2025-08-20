@@ -59,20 +59,21 @@ Install dependencies:
 pip install opencv-python numpy
 ```
 
----
 
 ### Installation
 
-1. Clone the repo
-   ```bash
-   git clone https://github.com/jaredcasarez/atypic.git
-   cd atypic
-   ```
+Clone the repo
+ ```bash
+ git clone https://github.com/jaredcasarez/atypic.git
+ cd atypic
+ ```
+<br />
 
-2. Install the package
-    ```bash
-    pip install ./
-    ```
+Install the package
+```bash
+pip install .
+```
+    
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
@@ -83,13 +84,12 @@ pip install opencv-python numpy
 ```python
 import cv2
 import matplotlib.pyplot as plt
-import numpy as np
 from atypic.effects import Corruption
 from atypic.mask import Masker
 
 frame = cv2.imread("input.jpg") #load image frame
 masker = Masker(frame) #create blank mask
-masker.create_rectangle_mask((0.1,0.3),(0.7,0.7))
+masker.create_rectangle(0.1,0.3),(0.7,0.7))
 corruption_effect = Corruption(frame, mask=masker.mask) #pass mask into effect initialization
 edited_frame = corruption_effect.apply()
 plt.axis("off")
