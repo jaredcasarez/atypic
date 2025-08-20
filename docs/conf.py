@@ -29,7 +29,9 @@ language = 'en'
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = 'sphinx_rtd_theme'
-
+autoclass_content = 'both'
+autodoc_member_order = 'bysource'
+add_module_names = False
 html_static_path = ['_static']
 
 # -- Options for todo extension ----------------------------------------------
