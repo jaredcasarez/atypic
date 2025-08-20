@@ -1,8 +1,0 @@
-Metadata-Version: 2.4
-Name: atypic
-Version: 0.0.1
-Summary: Image editing, but wrong.
-Project-URL: Homepage, https://github.com/jaredcasarez/atypic
-Author-email: Jared Casarez <jaredcasarez1@gmail.com>
-Requires-Dist: numpy
-Requires-Dist: opencv-python
