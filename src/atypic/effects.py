@@ -222,7 +222,45 @@ class Corruption(Effect):
             raise ValueError(f"Unknown corruption type: {self.corruption_type}")
         return self.blend()
 
+class Pixelate(Effect):
+    """
+    Apply a pixelation effect to an image frame.
+    
+    This effect reduces the resolution of the frame by averaging blocks of pixels.
+    """
 
+    def __init__(self, frame, pixel_size=0.1, **kwargs):
+        """
+        Args:
+            frame (numpy.ndarray): The video frame to apply the effect on.
+            pixel_size (int | float): Size of the pixel block. If float, it is interpreted as a proportion of the frame size.
+            **kwargs: Additional keyword arguments for the Effect base class.
+        """
+        super().__init__(frame, **kwargs)
+        if isinstance(pixel_size, float):
+            pixel_size = int(min(frame.shape[:2]) * pixel_size)
+        self.pixel_size = pixel_size
+
+    def apply(self):
+        """
+        Apply the pixelation effect to the frame.
+        """
+        h, w = self.frame.shape[:2]
+        out_h = h // self.pixel_size
+        out_w = w // self.pixel_size
+        out = np.zeros((out_h, out_w, 3), dtype=np.uint8)
+
+        for i in range(out_h):
+            for j in range(out_w):
+                block = self.frame[
+                    i * self.pixel_size : (i + 1) * self.pixel_size,
+                    j * self.pixel_size : (j + 1) * self.pixel_size,
+                ]
+                out[i, j] = np.mean(block, axis=(0, 1)).astype(np.uint8)
+
+        self.out = cv2.resize(out, (w, h), interpolation=cv2.INTER_NEAREST)
+        return self.blend()
+    
 class RollPixels(Effect):
     """
     Apply a pixel roll effect to an image frame.
