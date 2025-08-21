@@ -2,7 +2,7 @@ import cv2
 import numpy as np
 
 """
-Module for image/video effects.
+Module for image effects.
 
 This module provides various effects that can be applied to image frames, such as color channel splitting,
 color palette reduction, color value shifting, pixel corruption, pixel rolling, and sorting.
@@ -12,14 +12,14 @@ and application of the effect to a given frame.
 
 
 class Effect:
-    """Base class for image/video effects.
+    """Base class for image effects.
     """
 
     def __init__(self, frame, opacity=255, mask=None):
         """
     
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             opacity (int): Opacity of the effect (0-255). 255 is fully visible, 0 is invisible.
             mask (numpy.ndarray, optional): A mask (0-255) defining the region and strength to apply the effect.
                 If None, the effect applies to the entire frame.
@@ -66,7 +66,7 @@ class ColorChannelSplit(Effect):
     def __init__(self, frame, split_distance=0.1, which="row", order="bgr", **kwargs):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             split_distance (int | float): Distance to shift each color channel. If float, it is interpreted as a proportion of the frame size.
             which (str): Direction of the split, either 'row' or 'col'.
             order (str): Order of color channels to apply the effect on ('bgr', 'rgb', etc.).
@@ -128,7 +128,7 @@ class ColorPaletteReduction(Effect):
     def __init__(self, frame, num_colors=4, **kwargs):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             num_colors (int): Number of colors to reduce the frame to.
             **kwargs: Additional keyword arguments for the Effect base class.
         """
@@ -166,7 +166,7 @@ class ColorValue(Effect):
     ):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             shift_value (tuple[float, float, float]): Amount to multiply the color values, for each channel (B, G, R).
             **kwargs: Additional keyword arguments for the Effect base class.
         """
@@ -196,7 +196,7 @@ class Corruption(Effect):
     def __init__(self, frame, corruption_type="random", bitsize=0.01, **kwargs):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             corruption_type (str): Type of corruption to apply (e.g., 'random').
             bitsize (int | float): Size of the corruption block. If float, it is
                 interpreted as a proportion of the frame size.
@@ -232,7 +232,7 @@ class Pixelate(Effect):
     def __init__(self, frame, pixel_size=0.1, **kwargs):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             pixel_size (int | float): Size of the pixel block. If float, it is interpreted as a proportion of the frame size.
             **kwargs: Additional keyword arguments for the Effect base class.
         """
@@ -269,7 +269,7 @@ class RollPixels(Effect):
     def __init__(self, frame, which="row", shift_length=0.1, **kwargs):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
                 which (str): Direction of the roll, either 'row' or 'col'.
             shift_length (int | float): Length of the pixel shift. If float, it is interpreted as a proportion of the frame size.
             **kwargs: Additional keyword arguments for the Effect base class.
@@ -331,7 +331,7 @@ class RollPixelsRandom(RollPixels):
     ):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
             which (str): Direction of the roll, either 'row' or 'col'.
             group_size (int | float): Size of the pixel block to shift. If float, it is interpreted as a proportion of the frame size.
             shift_range (tuple[int | float, int | float]): Range of random shifts. If floats, they are interpreted as proportions of the frame size.
@@ -409,7 +409,7 @@ class Sort(Effect):
     def __init__(self, frame, which="row", sort_by="value", reverse=False, **kwargs):
         """
         Args:
-            frame (numpy.ndarray): The video frame to apply the effect on.
+            frame (numpy.ndarray): The image frame to apply the effect on.
                 which (str): Direction of the sort, either 'row' or 'col'.
             sort_by (str): Criteria to sort by ('value', 'r', 'g',
                 'b'). If 'value', sorts by average color value; if 'r', 'g', or 'b', sorts by that channel.

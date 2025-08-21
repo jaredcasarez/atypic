@@ -8,16 +8,16 @@ This module provides classes and methods for creating and managing masks for ima
 
 class Masker:
     """
-    A class to create and manage masks for video frames.
+    A class to create and manage masks for image frames.
     
-    It allows for the creation of various shapes and patterns as masks, which can be applied to video frames.
+    It allows for the creation of various shapes and patterns as masks, which can be applied to image frames.
     The masks can be combined using different behaviors such as 'or', 'and', 'xor', 'nand', and 'nor'.
     """
 
     def __init__(self, frame, behavior="add"):
         """
         Args:
-            frame (np.ndarray): The video frame to apply masks to.
+            frame (np.ndarray): The image frame to apply masks to.
             behavior (str, optional): The default behavior for combining masks ('or', 'and', 'xor', 'nand', 'nor').
         """
         self.frame = frame
